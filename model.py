@@ -1,11 +1,8 @@
-import logging
+from logging_config import logger  # Import the logger from logging_config.py
 import os
 import torch
 from PIL import Image
 from transformers import BlipProcessor, BlipForConditionalGeneration
-
-# Set up logging
-logger = logging.getLogger(__name__)
 
 # Device setup: Use MPS if available, otherwise fall back to CPU
 device = "mps" if torch.backends.mps.is_available() else "cpu"
@@ -34,7 +31,12 @@ def generate_caption_for_image(img_path, processor, model):
 
         # Generate caption
         with torch.no_grad():
-            output = model.generate(**inputs)
+            output = model.generate(
+                **inputs,
+                max_length=100,    # Set a maximum length for the caption
+                num_beams=5,       # Use beam search for more diverse generation
+                early_stopping=True
+            )
 
         # Decode and return the caption
         caption = processor.decode(output[0], skip_special_tokens=True)
