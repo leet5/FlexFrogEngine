@@ -1,27 +1,38 @@
-from db import fetch_images_from_db
+import time
+from datetime import datetime, timezone
+
+from db import fetch_images_from_db_since, save_tags_to_db
 from image_processing import process_images_from_db
 from logging_config import logger
 from model import load_model_and_processor
 
 
 def main():
-    # Load the model and processor
     processor, model = load_model_and_processor()
+    last_checked_time = datetime.now(timezone.utc)
+    while True:
+        try:
+            images = fetch_images_from_db_since(last_checked_time)
+            if images:
+                logger.info(f"Found {len(images)} new image(s) to process.")
+                captions_and_tags = process_images_from_db(images, processor, model)
+                for image_id, image_name, _, _ in images:
+                    result = captions_and_tags.get(image_name)
+                    if result:
+                        logger.info(f"Image: {image_name}")
+                        logger.info(f"Caption: {result['caption']}")
+                        logger.info(f"Tags: {', '.join(result['tags'])}")
+                        save_tags_to_db(image_id, result["tags"])
+                    else:
+                        logger.warning(f"No tags generated for image: {image_name}")
+                latest_time = max(img[3] for img in images)  # assuming img[3] is created_at
+                last_checked_time = latest_time
+            else:
+                logger.info("No new images to process.")
+        except Exception:
+            logger.exception("Error occurred while processing new images.")
+        time.sleep(10)
 
-    # Process all images fetched from PostgreSQL and generate captions and tags
-    captions_and_tags = process_images_from_db(fetch_images_from_db, processor, model)
 
-    # Optionally, log or save the generated captions and tags
-    if captions_and_tags:
-        logger.info("Generated captions and tags for all images.")
-        for img_filename, data in captions_and_tags.items():
-            logger.info(f"Image: {img_filename}")
-            logger.info(f"Caption: {data['caption']}")
-            logger.info(f"Tags: {', '.join(data['tags'])}")
-    else:
-        logger.warning("No captions or tags were generated.")
-
-
-# Run the main function if the script is executed directly
 if __name__ == "__main__":
     main()
