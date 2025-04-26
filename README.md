@@ -1,5 +1,7 @@
 # Image Captioning and Tagging System
 
+<img src="logo.png" width="256" alt="">
+
 This project is an automated system for generating captions and tags for images using a pre-trained BLIP (Bootstrapped Language-Image Pretraining) model. It processes images from a database, generates captions and tags, and saves the results back to the database.
 
 ## Features
