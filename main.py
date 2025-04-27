@@ -16,16 +16,16 @@ def main():
             if images:
                 logger.info(f"Found {len(images)} new image(s) to process.")
                 captions_and_tags = process_images_from_db(images, processor, model)
-                for image_id, image_name, _, _ in images:
-                    result = captions_and_tags.get(image_name)
+                for image_id, _, _ in images:
+                    result = captions_and_tags.get(image_id)
                     if result:
-                        logger.info(f"Image: {image_name}")
+                        logger.info(f"Image: {image_id}")
                         logger.info(f"Caption: {result['caption']}")
                         logger.info(f"Tags: {', '.join(result['tags'])}")
                         save_tags_to_db(image_id, result["tags"])
                     else:
-                        logger.warning(f"No tags generated for image: {image_name}")
-                latest_time = max(img[3] for img in images)  # assuming img[3] is created_at
+                        logger.warning(f"No tags generated for image: {image_id}")
+                latest_time = max(img[2] for img in images)  # assuming img[3] is created_at
                 last_checked_time = latest_time
             else:
                 logger.info("No new images to process.")
