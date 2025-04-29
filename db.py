@@ -27,7 +27,7 @@ def fetch_images_from_db_since(timestamp):
         logger.info(f"Fetching images created after {timestamp}...")
         conn = get_db_connection()
         with conn.cursor() as cur:
-            cur.execute("SELECT id, image_data, created_at FROM images WHERE created_at > %s", (timestamp,))
+            cur.execute("SELECT id, data, created_at FROM images WHERE created_at > %s", (timestamp,))
             results = cur.fetchall()
             logger.info(f"Fetched {len(results)} images from the database.")
             return results
