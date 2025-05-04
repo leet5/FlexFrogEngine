@@ -28,7 +28,6 @@ def fetch_images_from_db_since(timestamp):
         with conn.cursor() as cur:
             cur.execute("SELECT id, data, created_at FROM images WHERE created_at > %s", (timestamp,))
             results = cur.fetchall()
-            logger.info(f"Fetched {len(results)} images from the database, created after {timestamp}.")
             return results
     except Exception as e:
         logger.exception("Error fetching images from the database.")

@@ -14,7 +14,7 @@ def main():
         try:
             images = fetch_images_from_db_since(last_checked_time)
             if images:
-                logger.info(f"Found {len(images)} new image(s) to process.")
+                logger.info(f"found {len(images)} new image(s) , created after {last_checked_time}")
                 captions_and_tags = process_images_from_db(images, processor, model)
                 for image_id, _, _ in images:
                     result = captions_and_tags.get(image_id)
