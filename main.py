@@ -27,8 +27,6 @@ def main():
                         logger.warning(f"No tags generated for image: {image_id}")
                 latest_time = max(img[2] for img in images)  # assuming img[3] is created_at
                 last_checked_time = latest_time
-            else:
-                logger.info("No new images to process.")
         except Exception:
             logger.exception("Error occurred while processing new images.")
         time.sleep(10)
