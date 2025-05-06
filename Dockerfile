@@ -9,8 +9,7 @@ WORKDIR /app
 
 # Install minimal system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    gcc \
-    libpq-dev \
+    libjpeg-dev zlib1g-dev \
  && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
@@ -21,7 +20,7 @@ RUN python -m nltk.downloader stopwords
 
 COPY . .
 
-# Create cache directory for transformers
-RUN mkdir -p /cache/transformers
+# Cache for models
+RUN mkdir -p /cache/transformers /cache/torch
 
 CMD ["python", "main.py"]

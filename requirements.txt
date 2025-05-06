@@ -1,9 +1,8 @@
 psycopg[binary]==3.1.18
 torch==2.2.1
-numpy<2
+numpy==1.26.4
 Pillow
 transformers
 nltk
 scikit-learn
-torchvision
---extra-index-url https://download.pytorch.org/whl/cpu
+torchvision==0.17.1
