@@ -12,7 +12,7 @@ device = "mps" if torch.backends.mps.is_available() else "cpu"
 
 def load_model_and_processor():
     logger.info("Loading model and processor...")
-    processor = Blip2Processor.from_pretrained("Salesforce/blip2-opt-2.7b")
+    processor = Blip2Processor.from_pretrained("Salesforce/blip2-opt-2.7b", use_fast=True)
     model = Blip2ForConditionalGeneration.from_pretrained("Salesforce/blip2-opt-2.7b", torch_dtype=torch.float32)
     model.to(device)
     logger.info("Model and processor loaded successfully.")
