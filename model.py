@@ -2,7 +2,7 @@ import io
 
 import torch
 from PIL import Image
-from transformers import Blip2Processor, Blip2ForConditionalGeneration
+from transformers import BlipProcessor, BlipForConditionalGeneration
 
 from logging_config import logger  # Import the logger from logging_config.py
 
@@ -12,8 +12,8 @@ device = "mps" if torch.backends.mps.is_available() else "cpu"
 
 def load_model_and_processor():
     logger.info("Loading model and processor...")
-    processor = Blip2Processor.from_pretrained("Salesforce/blip2-opt-2.7b", use_fast=True)
-    model = Blip2ForConditionalGeneration.from_pretrained("Salesforce/blip2-opt-2.7b", torch_dtype=torch.float32)
+    processor = BlipProcessor.from_pretrained("Salesforce/blip-image-captioning-large", use_fast=True)
+    model = BlipForConditionalGeneration.from_pretrained("Salesforce/blip-image-captioning-large", torch_dtype=torch.float32)
     model.to(device)
     logger.info("Model and processor loaded successfully.")
     return processor, model
